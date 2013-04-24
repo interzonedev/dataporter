@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.interzonedev.dataporter.service.DataSourceFinder;
+import com.interzonedev.dataporter.service.DataExporter;
+import com.interzonedev.dataporter.service.DataSourceProperties;
 import com.interzonedev.dataporter.web.DataPorterController;
 
 @Controller
@@ -28,8 +31,8 @@ public class ExportController extends DataPorterController {
 	public static final String FORM_VIEW = "export/exportForm";
 
 	@Inject
-	@Named("dataSourceFinder")
-	private DataSourceFinder dataSourceFinder;
+	@Named("dataExporter")
+	private DataExporter dataExporter;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String displayExportForm(Model model) {
@@ -51,7 +54,15 @@ public class ExportController extends DataPorterController {
 			return FORM_VIEW;
 		}
 
-		byte[] output = "".getBytes();
+		DataSourceProperties dataSourceProperties = new DataSourceProperties(exportForm.getDriverClassName().trim(),
+				exportForm.getUrl().trim(), exportForm.getUsername().trim(), exportForm.getPassword().trim());
+
+		List<String> tableNames = null;
+		if (!exportForm.isAllTables() && StringUtils.isNotBlank(exportForm.getTableNames())) {
+			tableNames = Arrays.asList(exportForm.getTableNames().trim().split(","));
+		}
+
+		byte[] output = dataExporter.export(dataSourceProperties, tableNames);
 
 		String exportFilename = exportForm.getExportFilename();
 		if (StringUtils.isBlank(exportFilename)) {

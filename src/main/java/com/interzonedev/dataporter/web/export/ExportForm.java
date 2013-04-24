@@ -1,5 +1,6 @@
 package com.interzonedev.dataporter.web.export;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class ExportForm {
@@ -78,4 +79,11 @@ public class ExportForm {
 		this.exportFilename = exportFilename;
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("driverClassName", getDriverClassName()).append("url", getUrl())
+				.append("username", getUsername()).append("password", getPassword())
+				.append("tableNames", getTableNames()).append("allTables", isAllTables())
+				.append("exportFilename", getExportFilename()).toString();
+	}
 }
