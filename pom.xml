@@ -115,14 +115,6 @@
 				<checksumPolicy>fail</checksumPolicy>
 			</releases>
 		</repository>
-		<repository>
-         <id>rocketlawyer snapshot</id>
-         <url>http://f1tst-linbld100/nexus/content/repositories/snapshots</url>
-      </repository>
-      <repository>
-         <id>rocketlawyer releases</id>
-         <url>http://f1tst-linbld100/nexus/content/repositories/releases</url>
-      </repository>
 	</repositories>
 
 	<build>

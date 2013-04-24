@@ -1,5 +1,3 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <jsp:include page="errorOutput.jsp" />
 
 <div id="errorsHeader">
