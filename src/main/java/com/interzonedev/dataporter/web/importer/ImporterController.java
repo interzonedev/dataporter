@@ -32,8 +32,7 @@ public class ImporterController extends DataPorterController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
-			throws IOException {
+	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result) throws IOException {
 
 		log.debug("importData: importerForm - " + importerForm);
 

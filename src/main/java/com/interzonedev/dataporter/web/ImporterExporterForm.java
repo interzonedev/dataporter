@@ -3,7 +3,7 @@ package com.interzonedev.dataporter.web;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class ImportExportForm {
+public class ImporterExporterForm {
 
 	@NotEmpty
 	private String driverClassName = "com.mysql.jdbc.Driver";

@@ -6,7 +6,7 @@ import com.interzonedev.dataporter.service.DataSourceProperties;
 
 public interface DataExporter {
 
-	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames)
+	public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames)
 			throws DataExporterException;
 
 }

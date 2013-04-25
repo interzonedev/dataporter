@@ -4,9 +4,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.interzonedev.dataporter.web.ImportExportForm;
+import com.interzonedev.dataporter.web.ImporterExporterForm;
 
-public class ImporterForm extends ImportExportForm {
+public class ImporterForm extends ImporterExporterForm {
 
 	@NotEmpty
 	private String importFilePath;

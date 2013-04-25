@@ -34,14 +34,14 @@ public class DbUnitDataExporter implements DataExporter {
 	private DbUnitHelper dbUnitHelper;
 
 	@Override
-	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames)
+	public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames)
 			throws DataExporterException {
 
-		Assert.notNull(dataSourceProperties, "export: The data source properties must be set");
-		Assert.notNull(dataSourceProperties, "export: The table names must be set");
-		Assert.notEmpty(tableNames, "export: The table names must not be empty");
+		Assert.notNull(dataSourceProperties, "exportData: The data source properties must be set");
+		Assert.notNull(dataSourceProperties, "exportData: The table names must be set");
+		Assert.notEmpty(tableNames, "exportData: The table names must not be empty");
 
-		log.debug("export: Exporting " + tableNames + " from " + dataSourceProperties);
+		log.debug("exportData: Exporting " + tableNames + " from " + dataSourceProperties);
 
 		byte[] data = null;
 
@@ -67,7 +67,7 @@ public class DbUnitDataExporter implements DataExporter {
 
 		} catch (Throwable t) {
 			String errorMessage = "Error exporting data";
-			log.error("export: " + errorMessage, t);
+			log.error("exportData: " + errorMessage, t);
 			throw new DataExporterException(errorMessage, t);
 		} finally {
 			try {
@@ -75,7 +75,7 @@ public class DbUnitDataExporter implements DataExporter {
 					connection.close();
 				}
 			} catch (SQLException se) {
-				log.error("export: Error closing connection", se);
+				log.error("exportData: Error closing connection", se);
 			}
 		}
 
