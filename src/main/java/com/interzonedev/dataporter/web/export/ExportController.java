@@ -58,10 +58,7 @@ public class ExportController extends DataPorterController {
 		DataSourceProperties dataSourceProperties = new DataSourceProperties(exportForm.getDriverClassName().trim(),
 				exportForm.getUrl().trim(), exportForm.getUsername().trim(), exportForm.getPassword().trim());
 
-		List<String> tableNames = null;
-		if (!exportForm.isAllTables() && StringUtils.isNotBlank(exportForm.getTableNames())) {
-			tableNames = Arrays.asList(exportForm.getTableNames().trim().split(","));
-		}
+		List<String> tableNames = Arrays.asList(exportForm.getTableNames().trim().split("\\s*,\\s*"));
 
 		byte[] output = dataExporter.export(dataSourceProperties, tableNames);
 

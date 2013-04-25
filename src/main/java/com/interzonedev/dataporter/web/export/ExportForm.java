@@ -17,9 +17,8 @@ public class ExportForm {
 	@NotEmpty
 	private String password = "rluser";
 
-	private String tableNames;
-
-	private boolean allTables;
+	@NotEmpty
+	private String tableNames = "taxonomy,class,entity";
 
 	private String exportFilename;
 
@@ -63,14 +62,6 @@ public class ExportForm {
 		this.tableNames = tableNames;
 	}
 
-	public boolean isAllTables() {
-		return allTables;
-	}
-
-	public void setAllTables(boolean allTables) {
-		this.allTables = allTables;
-	}
-
 	public String getExportFilename() {
 		return exportFilename;
 	}
@@ -83,7 +74,7 @@ public class ExportForm {
 	public String toString() {
 		return new ToStringBuilder(this).append("driverClassName", getDriverClassName()).append("url", getUrl())
 				.append("username", getUsername()).append("password", getPassword())
-				.append("tableNames", getTableNames()).append("allTables", isAllTables())
-				.append("exportFilename", getExportFilename()).toString();
+				.append("tableNames", getTableNames()).append("exportFilename", getExportFilename()).toString();
 	}
+
 }

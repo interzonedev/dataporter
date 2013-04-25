@@ -40,12 +40,6 @@
 		</div>
 
 		<div>
-			<label for="allTables">Export All Tables</label>
-			<form:checkbox path="allTables" id="allTables" cssClass="inputField" value="true" />
-			<form:errors path="allTables" cssClass="formError" />
-		</div>
-
-		<div>
 			<label for="exportFilename">Export Filename</label>
 			<form:input path="exportFilename" id="exportFilename" cssClass="inputField" />
 			<form:errors path="exportFilename" cssClass="formError" />

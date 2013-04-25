@@ -12,6 +12,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import ch.qos.logback.classic.Logger;
 
@@ -35,6 +36,12 @@ public class DbUnitDataExporter implements DataExporter {
 
 	@Override
 	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames) throws DataExportException {
+
+		Assert.notNull(dataSourceProperties, "export: The data source properties must be set");
+		Assert.notNull(dataSourceProperties, "export: The table names must be set");
+		Assert.notEmpty(tableNames, "export: The table names must not be empty");
+
+		log.debug("export: Exporting " + tableNames + " from " + dataSourceProperties);
 
 		byte[] data = null;
 
