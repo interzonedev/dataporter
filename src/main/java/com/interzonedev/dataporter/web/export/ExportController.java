@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.interzonedev.dataporter.service.DataExportException;
 import com.interzonedev.dataporter.service.DataExporter;
 import com.interzonedev.dataporter.service.DataSourceProperties;
 import com.interzonedev.dataporter.web.DataPorterController;
@@ -45,7 +46,7 @@ public class ExportController extends DataPorterController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String exportData(@Valid ExportForm exportForm, BindingResult result, HttpServletResponse response)
-			throws IOException {
+			throws IOException, DataExportException {
 
 		log.debug("exportData");
 
