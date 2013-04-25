@@ -2,6 +2,7 @@ package com.interzonedev.dataporter.service;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,9 +30,11 @@ public class DbUnitDataExporter implements DataExporter {
 
 		byte[] data = null;
 
+		Connection connection = null;
+
 		try {
 
-			Connection connection = connectionSource.getConnection(dataSourceProperties);
+			connection = connectionSource.getConnection(dataSourceProperties);
 
 			IDatabaseConnection databaseConnection = new DatabaseConnection(connection);
 
@@ -51,6 +54,14 @@ public class DbUnitDataExporter implements DataExporter {
 			String errorMessage = "Error exporting data";
 			log.error("export: " + errorMessage, t);
 			throw new DataExportException(errorMessage, t);
+		} finally {
+			try {
+				if ((null != connection) && !connection.isClosed()) {
+					connection.close();
+				}
+			} catch (SQLException se) {
+				log.error("export: Error closing connection", se);
+			}
 		}
 
 		return data;
