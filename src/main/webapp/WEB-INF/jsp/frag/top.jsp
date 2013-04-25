@@ -4,4 +4,6 @@
 	<a href="<c:url value="/home" />">Home</a>
 	|
 	<a href="<c:url value="/export" />">Export</a>
+	|
+	<a href="<c:url value="/importer" />">Import</a>
 </div>

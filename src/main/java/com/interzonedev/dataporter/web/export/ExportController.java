@@ -48,7 +48,7 @@ public class ExportController extends DataPorterController {
 	public String exportData(@Valid ExportForm exportForm, BindingResult result, HttpServletResponse response)
 			throws IOException, DataExportException {
 
-		log.debug("exportData");
+		log.debug("exportData: exportForm - " + exportForm);
 
 		if (result.hasErrors()) {
 			log.debug("Form has errors");
