@@ -2,8 +2,6 @@ package com.interzonedev.dataporter.web.importer;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -12,11 +10,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.interzonedev.dataporter.service.DataExportException;
-import com.interzonedev.dataporter.service.DataExporter;
 import com.interzonedev.dataporter.service.DataSourceProperties;
 import com.interzonedev.dataporter.web.DataPorterController;
 
@@ -26,10 +21,6 @@ public class ImporterController extends DataPorterController {
 
 	public static final String FORM_VIEW = "importer/importerForm";
 	public static final String RESULTS_VIEW = "importer/importerResults";
-
-	@Inject
-	@Named("dataExporter")
-	private DataExporter dataExporter;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String displayImporterForm(Model model) {
@@ -41,10 +32,10 @@ public class ImporterController extends DataPorterController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String importerData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
-			throws IOException, DataExportException {
+	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
+			throws IOException {
 
-		log.debug("importerData: importerForm - " + importerForm);
+		log.debug("importData: importerForm - " + importerForm);
 
 		if (result.hasErrors()) {
 			log.debug("Form has errors");
@@ -54,9 +45,10 @@ public class ImporterController extends DataPorterController {
 		DataSourceProperties dataSourceProperties = new DataSourceProperties(importerForm.getDriverClassName().trim(),
 				importerForm.getUrl().trim(), importerForm.getUsername().trim(), importerForm.getPassword().trim());
 
-		MultipartFile importFile = importerForm.getImportFile();;
+		MultipartFile importFile = importerForm.getImportFile();
+
 		byte[] importFileContents = importFile.getBytes();
-		
+
 		return RESULTS_VIEW;
 
 	}

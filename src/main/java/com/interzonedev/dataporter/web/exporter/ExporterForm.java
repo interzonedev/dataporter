@@ -1,11 +1,11 @@
-package com.interzonedev.dataporter.web.export;
+package com.interzonedev.dataporter.web.exporter;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.interzonedev.dataporter.web.ImportExportForm;
 
-public class ExportForm extends ImportExportForm {
+public class ExporterForm extends ImportExportForm {
 
 	@NotEmpty
 	private String tableNames = "taxonomy,class,entity";

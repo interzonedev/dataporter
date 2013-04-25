@@ -1,4 +1,4 @@
-package com.interzonedev.dataporter.service.dbunit;
+package com.interzonedev.dataporter.service.exporter;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
@@ -17,9 +17,8 @@ import org.springframework.util.Assert;
 import ch.qos.logback.classic.Logger;
 
 import com.interzonedev.dataporter.service.ConnectionSource;
-import com.interzonedev.dataporter.service.DataExportException;
-import com.interzonedev.dataporter.service.DataExporter;
 import com.interzonedev.dataporter.service.DataSourceProperties;
+import com.interzonedev.dataporter.service.dbunit.DbUnitHelper;
 
 @Named("dataExporter")
 public class DbUnitDataExporter implements DataExporter {
@@ -35,7 +34,8 @@ public class DbUnitDataExporter implements DataExporter {
 	private DbUnitHelper dbUnitHelper;
 
 	@Override
-	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames) throws DataExportException {
+	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames)
+			throws DataExporterException {
 
 		Assert.notNull(dataSourceProperties, "export: The data source properties must be set");
 		Assert.notNull(dataSourceProperties, "export: The table names must be set");
@@ -68,7 +68,7 @@ public class DbUnitDataExporter implements DataExporter {
 		} catch (Throwable t) {
 			String errorMessage = "Error exporting data";
 			log.error("export: " + errorMessage, t);
-			throw new DataExportException(errorMessage, t);
+			throw new DataExporterException(errorMessage, t);
 		} finally {
 			try {
 				if ((null != connection) && !connection.isClosed()) {
@@ -80,13 +80,6 @@ public class DbUnitDataExporter implements DataExporter {
 		}
 
 		return data;
-
-	}
-
-	@Override
-	public byte[] export(DataSourceProperties dataSourceProperties) throws DataExportException {
-
-		return export(dataSourceProperties, null);
 
 	}
 

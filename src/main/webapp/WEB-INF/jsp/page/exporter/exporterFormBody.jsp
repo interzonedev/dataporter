@@ -4,7 +4,7 @@
 <c:url var="formAction" value="/export" scope="page" />
 
 <div class="section">
-	<form:form modelAttribute="exportForm" action="${formAction}" method="post">
+	<form:form modelAttribute="exporterForm" action="${formAction}" method="post">
 		<div class="globalErrorsContainer">
 			<form:errors cssClass="formError" />
 		</div>

@@ -1,4 +1,4 @@
-package com.interzonedev.dataporter.web.export;
+package com.interzonedev.dataporter.web.exporter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,49 +20,49 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.interzonedev.dataporter.service.DataExportException;
-import com.interzonedev.dataporter.service.DataExporter;
 import com.interzonedev.dataporter.service.DataSourceProperties;
+import com.interzonedev.dataporter.service.exporter.DataExporter;
+import com.interzonedev.dataporter.service.exporter.DataExporterException;
 import com.interzonedev.dataporter.web.DataPorterController;
 
 @Controller
 @RequestMapping(value = "/export")
-public class ExportController extends DataPorterController {
+public class ExporterController extends DataPorterController {
 
-	public static final String FORM_VIEW = "export/exportForm";
+	public static final String FORM_VIEW = "exporter/exporterForm";
 
 	@Inject
 	@Named("dataExporter")
 	private DataExporter dataExporter;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String displayExportForm(Model model) {
-		log.debug("displayExportForm");
+	public String displayExporterForm(Model model) {
+		log.debug("displayExporterForm");
 
-		model.addAttribute("exportForm", new ExportForm());
+		model.addAttribute("exporterForm", new ExporterForm());
 
 		return FORM_VIEW;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String exportData(@Valid ExportForm exportForm, BindingResult result, HttpServletResponse response)
-			throws IOException, DataExportException {
+	public String exportData(@Valid ExporterForm exporterForm, BindingResult result, HttpServletResponse response)
+			throws IOException, DataExporterException {
 
-		log.debug("exportData: exportForm - " + exportForm);
+		log.debug("exportData: exporterForm - " + exporterForm);
 
 		if (result.hasErrors()) {
 			log.debug("Form has errors");
 			return FORM_VIEW;
 		}
 
-		DataSourceProperties dataSourceProperties = new DataSourceProperties(exportForm.getDriverClassName().trim(),
-				exportForm.getUrl().trim(), exportForm.getUsername().trim(), exportForm.getPassword().trim());
+		DataSourceProperties dataSourceProperties = new DataSourceProperties(exporterForm.getDriverClassName().trim(),
+				exporterForm.getUrl().trim(), exporterForm.getUsername().trim(), exporterForm.getPassword().trim());
 
-		List<String> tableNames = Arrays.asList(exportForm.getTableNames().trim().split("\\s*,\\s*"));
+		List<String> tableNames = Arrays.asList(exporterForm.getTableNames().trim().split("\\s*,\\s*"));
 
 		byte[] output = dataExporter.export(dataSourceProperties, tableNames);
 
-		String exportFilename = exportForm.getExportFilename();
+		String exportFilename = exporterForm.getExportFilename();
 		if (StringUtils.isBlank(exportFilename)) {
 			exportFilename = generateExportFilename();
 		}
