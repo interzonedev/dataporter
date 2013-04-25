@@ -2,6 +2,8 @@ package com.interzonedev.dataporter.web.importer;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.interzonedev.dataporter.service.DataSourceProperties;
+import com.interzonedev.dataporter.service.importer.DataImporter;
+import com.interzonedev.dataporter.service.importer.DataImporterException;
 import com.interzonedev.dataporter.web.DataPorterController;
 
 @Controller
@@ -21,6 +25,10 @@ public class ImporterController extends DataPorterController {
 
 	public static final String FORM_VIEW = "importer/importerForm";
 	public static final String RESULTS_VIEW = "importer/importerResults";
+
+	@Inject
+	@Named("dataImporter")
+	private DataImporter dataImporter;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String displayImporterForm(Model model) {
@@ -32,7 +40,8 @@ public class ImporterController extends DataPorterController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result) throws IOException {
+	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
+			throws IOException, DataImporterException {
 
 		log.debug("importData: importerForm - " + importerForm);
 
@@ -47,6 +56,8 @@ public class ImporterController extends DataPorterController {
 		MultipartFile importFile = importerForm.getImportFile();
 
 		byte[] importFileContents = importFile.getBytes();
+
+		dataImporter.importData(dataSourceProperties, importFileContents);
 
 		return RESULTS_VIEW;
 

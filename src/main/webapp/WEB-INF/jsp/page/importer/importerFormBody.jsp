@@ -36,7 +36,7 @@
 		</div>
 
 		<div>
-			<label for="importFile">Password</label>
+			<label for="importFile">Data Set File</label>
 			<input type="file" id="importFile" name="importFile" size="40" class="inputField" />
 			<form:errors path="importFilePath" cssClass="formError" />
 		</div>

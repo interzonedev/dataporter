@@ -38,7 +38,7 @@ public class DbUnitDataExporter implements DataExporter {
 			throws DataExporterException {
 
 		Assert.notNull(dataSourceProperties, "exportData: The data source properties must be set");
-		Assert.notNull(dataSourceProperties, "exportData: The table names must be set");
+		Assert.notNull(tableNames, "exportData: The table names must be set");
 		Assert.notEmpty(tableNames, "exportData: The table names must not be empty");
 
 		log.debug("exportData: Exporting " + tableNames + " from " + dataSourceProperties);
