@@ -1,4 +1,4 @@
-package com.interzonedev.dataporter.service;
+package com.interzonedev.dataporter.service.dbunit;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
@@ -15,6 +15,11 @@ import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+
+import com.interzonedev.dataporter.service.ConnectionSource;
+import com.interzonedev.dataporter.service.DataExportException;
+import com.interzonedev.dataporter.service.DataExporter;
+import com.interzonedev.dataporter.service.DataSourceProperties;
 
 @Named("dataExporter")
 public class DbUnitDataExporter implements DataExporter {
