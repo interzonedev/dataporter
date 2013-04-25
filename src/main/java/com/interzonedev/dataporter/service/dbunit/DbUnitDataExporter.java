@@ -8,7 +8,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
@@ -30,6 +29,10 @@ public class DbUnitDataExporter implements DataExporter {
 	@Named("connectionSource")
 	private ConnectionSource connectionSource;
 
+	@Inject
+	@Named("dbUnitHelper")
+	private DbUnitHelper dbUnitHelper;
+
 	@Override
 	public byte[] export(DataSourceProperties dataSourceProperties, List<String> tableNames) throws DataExportException {
 
@@ -41,7 +44,7 @@ public class DbUnitDataExporter implements DataExporter {
 
 			connection = connectionSource.getConnection(dataSourceProperties);
 
-			IDatabaseConnection databaseConnection = new DatabaseConnection(connection);
+			IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
 
 			QueryDataSet queryDataSet = new QueryDataSet(databaseConnection);
 			for (String tableName : tableNames) {
