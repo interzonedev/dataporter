@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.StringUtils;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.xml.FlatXmlWriter;
@@ -34,7 +35,7 @@ public class DbUnitDataExporter implements DataExporter {
 	private DbUnitHelper dbUnitHelper;
 
 	@Override
-	public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames)
+	public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames, String query)
 			throws DataExporterException {
 
 		Assert.notNull(dataSourceProperties, "exportData: The data source properties must be set");
@@ -53,9 +54,15 @@ public class DbUnitDataExporter implements DataExporter {
 
 			IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
 
+			boolean addQuery = ((1 == tableNames.size()) && (StringUtils.isNotBlank(query)));
+
 			QueryDataSet queryDataSet = new QueryDataSet(databaseConnection);
 			for (String tableName : tableNames) {
-				queryDataSet.addTable(tableName);
+				if (addQuery) {
+					queryDataSet.addTable(tableName, query);
+				} else {
+					queryDataSet.addTable(tableName);
+				}
 			}
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

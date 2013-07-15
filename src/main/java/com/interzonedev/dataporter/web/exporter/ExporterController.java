@@ -60,7 +60,12 @@ public class ExporterController extends DataPorterController {
 
 		List<String> tableNames = Arrays.asList(exporterForm.getTableNames().trim().split("\\s*,\\s*"));
 
-		byte[] output = dataExporter.exportData(dataSourceProperties, tableNames);
+		String query = null;
+		if ((1 == tableNames.size()) && StringUtils.isNotBlank(exporterForm.getQuery())) {
+			query = exporterForm.getQuery();
+		}
+
+		byte[] output = dataExporter.exportData(dataSourceProperties, tableNames, query);
 
 		String exportFilename = exporterForm.getExportFilename();
 		if (StringUtils.isBlank(exportFilename)) {

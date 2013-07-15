@@ -12,6 +12,8 @@ public class ExporterForm extends ImporterExporterForm {
 
 	private String exportFilename;
 
+	private String query;
+
 	public String getTableNames() {
 		return tableNames;
 	}
@@ -28,10 +30,18 @@ public class ExporterForm extends ImporterExporterForm {
 		this.exportFilename = exportFilename;
 	}
 
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append(super.toString()).append("tableNames", getTableNames())
-				.append("exportFilename", getExportFilename()).toString();
+				.append("exportFilename", getExportFilename()).append("query", getQuery()).toString();
 	}
 
 }
