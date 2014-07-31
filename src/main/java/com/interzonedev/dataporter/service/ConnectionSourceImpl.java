@@ -14,24 +14,24 @@ import ch.qos.logback.classic.Logger;
 @Named("connectionSource")
 public class ConnectionSourceImpl implements ConnectionSource {
 
-	private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
+    private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
 
-	@Override
-	public Connection getConnection(DataSourceProperties dataSourceProperties) throws SQLException {
+    @Override
+    public Connection getConnection(DataSourceProperties dataSourceProperties) throws SQLException {
 
-		Assert.notNull(dataSourceProperties, "getConnection: The data source properties must be set");
+        Assert.notNull(dataSourceProperties, "getConnection: The data source properties must be set");
 
-		log.debug("getConnection: Getting connection for - " + dataSourceProperties);
+        log.debug("getConnection: Getting connection for - " + dataSourceProperties);
 
-		DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource(dataSourceProperties.getUrl(),
-				dataSourceProperties.getUsername(), dataSourceProperties.getPassword());
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource(dataSourceProperties.getUrl(),
+                dataSourceProperties.getUsername(), dataSourceProperties.getPassword());
 
-		Connection connection = driverManagerDataSource.getConnection();
+        Connection connection = driverManagerDataSource.getConnection();
 
-		log.debug("getConnection: Got connection - " + connection);
+        log.debug("getConnection: Got connection - " + connection);
 
-		return connection;
+        return connection;
 
-	}
+    }
 
 }

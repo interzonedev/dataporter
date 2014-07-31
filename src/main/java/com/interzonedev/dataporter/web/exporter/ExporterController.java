@@ -29,72 +29,72 @@ import com.interzonedev.dataporter.web.DataPorterController;
 @RequestMapping(value = "/export")
 public class ExporterController extends DataPorterController {
 
-	public static final String FORM_VIEW = "exporter/exporterForm";
+    public static final String FORM_VIEW = "exporter/exporterForm";
 
-	@Inject
-	@Named("dataExporter")
-	private DataExporter dataExporter;
+    @Inject
+    @Named("dataExporter")
+    private DataExporter dataExporter;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String displayExporterForm(Model model) {
-		log.debug("displayExporterForm");
+    @RequestMapping(method = RequestMethod.GET)
+    public String displayExporterForm(Model model) {
+        log.debug("displayExporterForm");
 
-		model.addAttribute("exporterForm", new ExporterForm());
+        model.addAttribute("exporterForm", new ExporterForm());
 
-		return FORM_VIEW;
-	}
+        return FORM_VIEW;
+    }
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String exportData(@Valid ExporterForm exporterForm, BindingResult result, HttpServletResponse response)
-			throws IOException, DataExporterException {
+    @RequestMapping(method = RequestMethod.POST)
+    public String exportData(@Valid ExporterForm exporterForm, BindingResult result, HttpServletResponse response)
+            throws IOException, DataExporterException {
 
-		log.debug("exportData: exporterForm - " + exporterForm);
+        log.debug("exportData: exporterForm - " + exporterForm);
 
-		if (result.hasErrors()) {
-			log.debug("Form has errors");
-			return FORM_VIEW;
-		}
+        if (result.hasErrors()) {
+            log.debug("Form has errors");
+            return FORM_VIEW;
+        }
 
-		DataSourceProperties dataSourceProperties = new DataSourceProperties(exporterForm.getDriverClassName().trim(),
-				exporterForm.getUrl().trim(), exporterForm.getUsername().trim(), exporterForm.getPassword().trim());
+        DataSourceProperties dataSourceProperties = new DataSourceProperties(exporterForm.getDriverClassName().trim(),
+                exporterForm.getUrl().trim(), exporterForm.getUsername().trim(), exporterForm.getPassword().trim());
 
-		List<String> tableNames = Arrays.asList(exporterForm.getTableNames().trim().split("\\s*,\\s*"));
+        List<String> tableNames = Arrays.asList(exporterForm.getTableNames().trim().split("\\s*,\\s*"));
 
-		String query = null;
-		if ((1 == tableNames.size()) && StringUtils.isNotBlank(exporterForm.getQuery())) {
-			query = exporterForm.getQuery();
-		}
+        String query = null;
+        if ((1 == tableNames.size()) && StringUtils.isNotBlank(exporterForm.getQuery())) {
+            query = exporterForm.getQuery();
+        }
 
-		byte[] output = dataExporter.exportData(dataSourceProperties, tableNames, query);
+        byte[] output = dataExporter.exportData(dataSourceProperties, tableNames, query);
 
-		String exportFilename = exporterForm.getExportFilename();
-		if (StringUtils.isBlank(exportFilename)) {
-			exportFilename = generateExportFilename();
-		}
+        String exportFilename = exporterForm.getExportFilename();
+        if (StringUtils.isBlank(exportFilename)) {
+            exportFilename = generateExportFilename();
+        }
 
-		response.setContentType("applicaton/octet-stream");
-		response.setHeader("Content-Disposition", "attachment; filename=" + exportFilename);
+        response.setContentType("applicaton/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + exportFilename);
 
-		OutputStream out = response.getOutputStream();
-		out.write(output);
-		out.flush();
+        OutputStream out = response.getOutputStream();
+        out.write(output);
+        out.flush();
 
-		return null;
+        return null;
 
-	}
+    }
 
-	private String generateExportFilename() {
+    private String generateExportFilename() {
 
-		StringBuilder filename = new StringBuilder("data_export_");
+        StringBuilder filename = new StringBuilder("data_export_");
 
-		DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS");
-		String currentDateStamp = formatter.format(new Date());
+        DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS");
+        String currentDateStamp = formatter.format(new Date());
 
-		filename.append(currentDateStamp);
-		filename.append(".xml");
+        filename.append(currentDateStamp);
+        filename.append(".xml");
 
-		return filename.toString();
+        return filename.toString();
 
-	}
+    }
 
 }

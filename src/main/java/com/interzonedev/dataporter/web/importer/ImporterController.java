@@ -23,44 +23,44 @@ import com.interzonedev.dataporter.web.DataPorterController;
 @RequestMapping(value = "/importer")
 public class ImporterController extends DataPorterController {
 
-	public static final String FORM_VIEW = "importer/importerForm";
-	public static final String RESULTS_VIEW = "importer/importerResults";
+    public static final String FORM_VIEW = "importer/importerForm";
+    public static final String RESULTS_VIEW = "importer/importerResults";
 
-	@Inject
-	@Named("dataImporter")
-	private DataImporter dataImporter;
+    @Inject
+    @Named("dataImporter")
+    private DataImporter dataImporter;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String displayImporterForm(Model model) {
-		log.debug("displayImporterForm");
+    @RequestMapping(method = RequestMethod.GET)
+    public String displayImporterForm(Model model) {
+        log.debug("displayImporterForm");
 
-		model.addAttribute("importerForm", new ImporterForm());
+        model.addAttribute("importerForm", new ImporterForm());
 
-		return FORM_VIEW;
-	}
+        return FORM_VIEW;
+    }
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
-			throws IOException, DataImporterException {
+    @RequestMapping(method = RequestMethod.POST)
+    public String importData(ModelMap model, @Valid ImporterForm importerForm, BindingResult result)
+            throws IOException, DataImporterException {
 
-		log.debug("importData: importerForm - " + importerForm);
+        log.debug("importData: importerForm - " + importerForm);
 
-		if (result.hasErrors()) {
-			log.debug("Form has errors");
-			return FORM_VIEW;
-		}
+        if (result.hasErrors()) {
+            log.debug("Form has errors");
+            return FORM_VIEW;
+        }
 
-		DataSourceProperties dataSourceProperties = new DataSourceProperties(importerForm.getDriverClassName().trim(),
-				importerForm.getUrl().trim(), importerForm.getUsername().trim(), importerForm.getPassword().trim());
+        DataSourceProperties dataSourceProperties = new DataSourceProperties(importerForm.getDriverClassName().trim(),
+                importerForm.getUrl().trim(), importerForm.getUsername().trim(), importerForm.getPassword().trim());
 
-		MultipartFile importFile = importerForm.getImportFile();
+        MultipartFile importFile = importerForm.getImportFile();
 
-		byte[] importFileContents = importFile.getBytes();
+        byte[] importFileContents = importFile.getBytes();
 
-		dataImporter.importData(dataSourceProperties, importFileContents);
+        dataImporter.importData(dataSourceProperties, importFileContents);
 
-		return RESULTS_VIEW;
+        return RESULTS_VIEW;
 
-	}
+    }
 
 }

@@ -24,70 +24,70 @@ import com.interzonedev.dataporter.service.dbunit.DbUnitHelper;
 @Named("dataExporter")
 public class DbUnitDataExporter implements DataExporter {
 
-	private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
+    private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
 
-	@Inject
-	@Named("connectionSource")
-	private ConnectionSource connectionSource;
+    @Inject
+    @Named("connectionSource")
+    private ConnectionSource connectionSource;
 
-	@Inject
-	@Named("dbUnitHelper")
-	private DbUnitHelper dbUnitHelper;
+    @Inject
+    @Named("dbUnitHelper")
+    private DbUnitHelper dbUnitHelper;
 
-	@Override
-	public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames, String query)
-			throws DataExporterException {
+    @Override
+    public byte[] exportData(DataSourceProperties dataSourceProperties, List<String> tableNames, String query)
+            throws DataExporterException {
 
-		Assert.notNull(dataSourceProperties, "exportData: The data source properties must be set");
-		Assert.notNull(tableNames, "exportData: The table names must be set");
-		Assert.notEmpty(tableNames, "exportData: The table names must not be empty");
+        Assert.notNull(dataSourceProperties, "exportData: The data source properties must be set");
+        Assert.notNull(tableNames, "exportData: The table names must be set");
+        Assert.notEmpty(tableNames, "exportData: The table names must not be empty");
 
-		log.debug("exportData: Exporting " + tableNames + " from " + dataSourceProperties);
+        log.debug("exportData: Exporting " + tableNames + " from " + dataSourceProperties);
 
-		byte[] data = null;
+        byte[] data = null;
 
-		Connection connection = null;
+        Connection connection = null;
 
-		try {
+        try {
 
-			connection = connectionSource.getConnection(dataSourceProperties);
+            connection = connectionSource.getConnection(dataSourceProperties);
 
-			IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
+            IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
 
-			boolean addQuery = ((1 == tableNames.size()) && (StringUtils.isNotBlank(query)));
+            boolean addQuery = ((1 == tableNames.size()) && (StringUtils.isNotBlank(query)));
 
-			QueryDataSet queryDataSet = new QueryDataSet(databaseConnection);
-			for (String tableName : tableNames) {
-				if (addQuery) {
-					queryDataSet.addTable(tableName, query);
-				} else {
-					queryDataSet.addTable(tableName);
-				}
-			}
+            QueryDataSet queryDataSet = new QueryDataSet(databaseConnection);
+            for (String tableName : tableNames) {
+                if (addQuery) {
+                    queryDataSet.addTable(tableName, query);
+                } else {
+                    queryDataSet.addTable(tableName);
+                }
+            }
 
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-			FlatXmlWriter datasetWriter = new FlatXmlWriter(baos);
-			datasetWriter.write(queryDataSet);
+            FlatXmlWriter datasetWriter = new FlatXmlWriter(baos);
+            datasetWriter.write(queryDataSet);
 
-			data = baos.toByteArray();
+            data = baos.toByteArray();
 
-		} catch (Throwable t) {
-			String errorMessage = "Error exporting data";
-			log.error("exportData: " + errorMessage, t);
-			throw new DataExporterException(errorMessage, t);
-		} finally {
-			try {
-				if ((null != connection) && !connection.isClosed()) {
-					connection.close();
-				}
-			} catch (SQLException se) {
-				log.error("exportData: Error closing connection", se);
-			}
-		}
+        } catch (Throwable t) {
+            String errorMessage = "Error exporting data";
+            log.error("exportData: " + errorMessage, t);
+            throw new DataExporterException(errorMessage, t);
+        } finally {
+            try {
+                if ((null != connection) && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException se) {
+                log.error("exportData: Error closing connection", se);
+            }
+        }
 
-		return data;
+        return data;
 
-	}
+    }
 
 }

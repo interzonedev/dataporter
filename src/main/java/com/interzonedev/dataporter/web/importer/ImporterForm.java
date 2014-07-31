@@ -8,34 +8,34 @@ import com.interzonedev.dataporter.web.ImporterExporterForm;
 
 public class ImporterForm extends ImporterExporterForm {
 
-	@NotEmpty
-	private String importFilePath;
+    @NotEmpty
+    private String importFilePath;
 
-	private MultipartFile importFile;
+    private MultipartFile importFile;
 
-	public String getImportFilePath() {
-		return importFilePath;
-	}
+    public String getImportFilePath() {
+        return importFilePath;
+    }
 
-	public void setImportFilePath(String importFilePath) {
-		this.importFilePath = importFilePath;
-	}
+    public void setImportFilePath(String importFilePath) {
+        this.importFilePath = importFilePath;
+    }
 
-	public MultipartFile getImportFile() {
-		return importFile;
-	}
+    public MultipartFile getImportFile() {
+        return importFile;
+    }
 
-	public void setImportFile(MultipartFile importFile) {
-		this.importFile = importFile;
-		if (!this.importFile.isEmpty()) {
-			setImportFilePath(this.importFile.getOriginalFilename());
-		}
-	}
+    public void setImportFile(MultipartFile importFile) {
+        this.importFile = importFile;
+        if (!this.importFile.isEmpty()) {
+            setImportFilePath(this.importFile.getOriginalFilename());
+        }
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append(super.toString()).append("importFilePath", getImportFilePath())
-				.toString();
-	}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(super.toString()).append("importFilePath", getImportFilePath())
+                .toString();
+    }
 
 }

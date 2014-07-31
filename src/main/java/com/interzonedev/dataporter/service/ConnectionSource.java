@@ -5,6 +5,6 @@ import java.sql.SQLException;
 
 public interface ConnectionSource {
 
-	public Connection getConnection(DataSourceProperties dataSourceProperties) throws SQLException;
+    public Connection getConnection(DataSourceProperties dataSourceProperties) throws SQLException;
 
 }

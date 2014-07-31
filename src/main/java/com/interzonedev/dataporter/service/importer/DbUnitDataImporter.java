@@ -23,51 +23,51 @@ import com.interzonedev.dataporter.service.dbunit.DbUnitHelper;
 @Named("dataImporter")
 public class DbUnitDataImporter implements DataImporter {
 
-	private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
+    private final Logger log = (Logger) LoggerFactory.getLogger(getClass());
 
-	@Inject
-	@Named("connectionSource")
-	private ConnectionSource connectionSource;
+    @Inject
+    @Named("connectionSource")
+    private ConnectionSource connectionSource;
 
-	@Inject
-	@Named("dbUnitHelper")
-	private DbUnitHelper dbUnitHelper;
+    @Inject
+    @Named("dbUnitHelper")
+    private DbUnitHelper dbUnitHelper;
 
-	@Override
-	public void importData(DataSourceProperties dataSourceProperties, byte[] dataSetContents)
-			throws DataImporterException {
+    @Override
+    public void importData(DataSourceProperties dataSourceProperties, byte[] dataSetContents)
+            throws DataImporterException {
 
-		Assert.notNull(dataSourceProperties, "importData: The data source properties must be set");
-		Assert.notNull(dataSetContents, "importData: The data set contents must be set");
+        Assert.notNull(dataSourceProperties, "importData: The data source properties must be set");
+        Assert.notNull(dataSetContents, "importData: The data set contents must be set");
 
-		Connection connection = null;
+        Connection connection = null;
 
-		try {
+        try {
 
-			FlatXmlDataSetBuilder flatXmlDataSetBuilder = new FlatXmlDataSetBuilder();
-			ByteArrayInputStream dataSetStream = new ByteArrayInputStream(dataSetContents);
-			IDataSet dataSet = flatXmlDataSetBuilder.build(dataSetStream);
+            FlatXmlDataSetBuilder flatXmlDataSetBuilder = new FlatXmlDataSetBuilder();
+            ByteArrayInputStream dataSetStream = new ByteArrayInputStream(dataSetContents);
+            IDataSet dataSet = flatXmlDataSetBuilder.build(dataSetStream);
 
-			connection = connectionSource.getConnection(dataSourceProperties);
+            connection = connectionSource.getConnection(dataSourceProperties);
 
-			IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
+            IDatabaseConnection databaseConnection = dbUnitHelper.getDatabaseConnection(connection);
 
-			DatabaseOperation.CLEAN_INSERT.execute(databaseConnection, dataSet);
+            DatabaseOperation.CLEAN_INSERT.execute(databaseConnection, dataSet);
 
-		} catch (Throwable t) {
-			String errorMessage = "Error importing data";
-			log.error("importData: " + errorMessage, t);
-			throw new DataImporterException(errorMessage, t);
-		} finally {
-			try {
-				if ((null != connection) && !connection.isClosed()) {
-					connection.close();
-				}
-			} catch (SQLException se) {
-				log.error("importData: Error closing connection", se);
-			}
-		}
+        } catch (Throwable t) {
+            String errorMessage = "Error importing data";
+            log.error("importData: " + errorMessage, t);
+            throw new DataImporterException(errorMessage, t);
+        } finally {
+            try {
+                if ((null != connection) && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException se) {
+                log.error("importData: Error closing connection", se);
+            }
+        }
 
-	}
+    }
 
 }
